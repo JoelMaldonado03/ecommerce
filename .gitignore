@@ -1,0 +1,17 @@
+# Entornos virtuales y dependencias
+venv/
+node_modules/
+
+# Archivos temporales
+__pycache__/
+*.pyc
+*.log
+*.sqlite3
+
+# Configuración local
+.env
+.env.*
+
+# Archivos generados
+static/images/
+frontend/dist/

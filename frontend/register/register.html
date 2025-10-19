@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro - Tienda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#16a34a',
+            secondary: '#1e293b'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-center">Crear una cuenta</h1>
+    <form id="registerForm" class="space-y-4">
+
+      <!-- Nombre -->
+      <div>
+        <label for="nombre" class="block mb-1 font-semibold">Nombre</label>
+        <input type="text" id="username" name="username" required
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:outline-none bg-transparent" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="nombreError">Por favor ingresa tu nombre</p>
+      </div>
+
+      <!-- Correo -->
+      <div>
+        <label for="correo" class="block mb-1 font-semibold">Correo electrónico</label>
+        <input type="email" id="email" name="email" required
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:outline-none bg-transparent" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="correoError">Ingresa un correo válido</p>
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block mb-1 font-semibold">Contraseña</label>
+        <input type="password" id="password" name="password" required minlength="6"
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:outline-none bg-transparent" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="passwordError">Mínimo 6 caracteres</p>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div>
+        <label for="confirmPassword" class="block mb-1 font-semibold">Confirmar contraseña</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:outline-none bg-transparent" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="confirmError">Las contraseñas no coinciden</p>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit"
+        class="w-full bg-primary text-white py-2 rounded-lg hover:bg-green-700 transition duration-300">
+        Registrarse
+      </button>
+    </form>
+
+    <!-- Enlace de login -->
+    <p class="text-center text-sm">
+      ¿Ya tienes cuenta?
+      <a href="/login/login.html" class="text-primary hover:underline">Inicia sesión</a>
+    </p>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const username = document.getElementById('username');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let valido = true;
+
+      // Validación nombre
+      if (nombre.value.trim() === '') {
+        document.getElementById('nombreError').classList.remove('hidden');
+        valido = false;
+      } else {
+        document.getElementById('nombreError').classList.add('hidden');
+      }
+
+      // Validación correo
+      const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!regexCorreo.test(correo.value)) {
+        document.getElementById('correoError').classList.remove('hidden');
+        valido = false;
+      } else {
+        document.getElementById('correoError').classList.add('hidden');
+      }
+
+      // Validación contraseña
+      if (password.value.length < 6) {
+        document.getElementById('passwordError').classList.remove('hidden');
+        valido = false;
+      } else {
+        document.getElementById('passwordError').classList.add('hidden');
+      }
+
+      // Confirmación contraseña
+      if (password.value !== confirmPassword.value) {
+        document.getElementById('confirmError').classList.remove('hidden');
+        valido = false;
+      } else {
+        document.getElementById('confirmError').classList.add('hidden');
+      }
+
+      if (valido) {
+  const data = {
+    username: username.value,
+    email: email.value,
+    password: password.value
+  };
+
+  fetch("http://localhost:8000/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(async res => {
+    const result = await res.json();
+    if (res.ok) {
+      alert("Registro exitoso 🎉 Token: " + result.access_token);
+      // Puedes guardar el token en localStorage si quieres
+      // localStorage.setItem("token", result.access_token);
+    } else {
+      alert("Error: " + result.detail);
+    }
+  })
+  .catch(err => {
+    console.error("Error de conexión:", err);
+    alert("No se pudo conectar al servidor");
+  });
+}
+    });
+  </script>
+</body>
+</html>

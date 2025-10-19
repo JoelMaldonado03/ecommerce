@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrador - E-commerce</title>
+    <link href="/dist/output.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  </head>
+
+  <body
+    class="bg-[#0f172a] text-white flex flex-col items-center min-h-screen transition-colors duration-300"
+  >
+    <!-- NAVBAR -->
+    <nav
+      class="w-full bg-[#1e293b] py-4 px-6 flex justify-between items-center shadow-lg"
+    >
+      <h1 class="text-2xl font-bold">Admin Panel</h1>
+      <a
+        href="/"
+        class="text-green-400 hover:text-green-300 font-medium transition-colors"
+        >Volver al inicio</a
+      >
+    </nav>
+
+    <!-- CARGAR EXCEL -->
+    <div
+      class="bg-[#1e293b] rounded-lg p-8 mt-10 w-full max-w-3xl shadow-xl border border-gray-700"
+    >
+      <h2 class="text-xl font-bold mb-4 text-green-400 text-center">
+        Cargar productos desde Excel
+      </h2>
+      <div class="flex flex-col items-center gap-4">
+        <input
+          type="file"
+          id="excelFile"
+          accept=".xlsx, .xls, .csv"
+          class="file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:bg-green-500 file:text-white file:cursor-pointer hover:file:bg-green-600 transition"
+        />
+        <button
+          id="uploadExcelBtn"
+          class="bg-green-500 hover:bg-green-600 px-6 py-2 rounded font-semibold"
+        >
+          Subir al servidor
+        </button>
+      </div>
+      <p id="excelMessage" class="mt-4 text-center text-sm"></p>
+
+      <!-- Vista previa -->
+      <div id="excelPreview" class="mt-6 overflow-x-auto hidden">
+        <table class="w-full text-sm border border-gray-700 rounded">
+          <thead>
+            <tr class="bg-gray-700 text-green-400">
+              <th class="px-3 py-2">Nombre</th>
+              <th class="px-3 py-2">Descripción</th>
+              <th class="px-3 py-2">Precio</th>
+              <th class="px-3 py-2">Archivo de Imagen</th>
+            </tr>
+          </thead>
+          <tbody id="previewBody" class="text-gray-300"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA DE PRODUCTOS -->
+    <div
+      class="mt-10 w-full max-w-5xl bg-[#1e293b] p-6 rounded-lg shadow-xl border border-gray-700"
+    >
+      <h2 class="text-xl font-bold mb-4 text-center text-green-400">
+        Productos existentes
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="text-green-400 border-b border-gray-600">
+              <th class="py-2 px-3">Nombre</th>
+              <th class="py-2 px-3">Descripción</th>
+              <th class="py-2 px-3">Precio</th>
+              <th class="py-2 px-3">Imagen</th>
+              <th class="py-2 px-3 text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="productTable" class="text-gray-300"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const tableBody = document.getElementById("productTable");
+
+      //Cargar productos existentes
+      async function loadProducts() {
+        const res = await fetch("http://localhost:8000/products");
+        const products = await res.json();
+        tableBody.innerHTML = "";
+        products.forEach((p) => {
+          const row = document.createElement("tr");
+          row.classList.add("border-b", "border-gray-700");
+
+          row.innerHTML = `
+            <td class="py-2 px-3">${p.name}</td>
+            <td class="py-2 px-3">${p.description || "-"}</td>
+            <td class="py-2 px-3">$${p.price}</td>
+            <td class="py-2 px-3">
+              ${
+                p.image_filename
+                  ? `<img src="http://localhost:8000/uploads/${p.image_filename}" class="h-10 rounded" />`
+                  : "-"
+              }
+            </td>
+            <td class="py-2 px-3 flex gap-2 justify-center">
+              <button
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold transition"
+                onclick="deleteProduct(${p.id})">
+                🗑️ Eliminar
+              </button>
+            </td>`;
+          tableBody.appendChild(row);
+        });
+      }
+
+      // 🔹 Leer Excel
+      const excelFile = document.getElementById("excelFile");
+      const previewBody = document.getElementById("previewBody");
+      const excelPreview = document.getElementById("excelPreview");
+      let excelData = [];
+
+      excelFile.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+
+        reader.onload = (evt) => {
+          const data = new Uint8Array(evt.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(sheet);
+          excelData = json;
+          previewBody.innerHTML = "";
+
+          json.forEach((p) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="px-3 py-2">${p.name || "-"}</td>
+              <td class="px-3 py-2">${p.description || "-"}</td>
+              <td class="px-3 py-2">${p.price || "-"}</td>
+              <td class="px-3 py-2">${p.image_filename || "-"}</td>`;
+            previewBody.appendChild(row);
+          });
+          excelPreview.classList.remove("hidden");
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      // 🔹 Subir Excel al backend
+      document;
+      document
+        .getElementById("uploadExcelBtn")
+        .addEventListener("click", async () => {
+          const fileInput = document.getElementById("excelFile");
+          const file = fileInput.files[0];
+          if (!file) {
+            alert("Selecciona un archivo Excel primero");
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          const res = await fetch(
+            "http://localhost:8000/products/upload-products-excel",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          const result = await res.json();
+          if (res.ok) {
+            document.getElementById("excelMessage").textContent =
+              "✅ Productos cargados exitosamente";
+            loadProducts();
+          } else {
+            document.getElementById("excelMessage").textContent =
+              "❌ Error al subir Excel: " + result.detail;
+          }
+        });
+
+      // 🔹 Eliminar producto
+      async function deleteProduct(id) {
+        if (!confirm("¿Deseas eliminar este producto?")) return;
+        const res = await fetch(`http://localhost:8000/products/${id}`, {
+          method: "DELETE",
+        });
+        if (res.ok) loadProducts();
+      }
+
+      // Inicializar
+      loadProducts();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecommerce Mockup Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+  </head>
+  <body
+    class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-300"
+  >
+    <!-- NAVBAR -->
+    <nav
+      class="bg-white dark:bg-gray-800 shadow flex justify-center space-x-8 py-4 relative"
+    >
+      <a
+        href="#"
+        class="px-4 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >Hombre</a
+      >
+      <a
+        href="#"
+        class="px-4 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >Mujer</a
+      >
+      <a
+        href="#"
+        class="px-4 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >Niños</a
+      >
+      <a
+        href="#"
+        class="px-4 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >Deporte</a
+      >
+      <button
+        id="toggleDarkMode"
+        class="absolute right-4 top-3 bg-gray-300 dark:bg-gray-700 text-sm px-3 py-1 rounded transition hover:bg-gray-400 dark:hover:bg-gray-600"
+      >
+        🌞 / 🌙
+      </button>
+    </nav>
+
+    <!-- LOGIN -->
+    <div
+      class="flex justify-between items-center bg-gray-300 dark:bg-gray-800 px-4 py-2"
+    >
+      <p>Inicia sesión y añade tus productos favoritos</p>
+      <button
+        id="loginbtn"
+        class="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700 transition"
+      >
+        Iniciar sesión
+      </button>
+    </div>
+
+    <!-- BANNER -->
+    <section
+      class="mx-4 my-4 bg-gray-400 dark:bg-gray-700 h-48 rounded-lg flex items-center justify-center animate-fade-in"
+    >
+      <span class="text-white text-xl">Banner Principal</span>
+    </section>
+
+    <!-- CARRUSEL PRODUCTOS DESTACADOS -->
+    <section class="mx-4 relative overflow-hidden">
+      <div class="flex justify-between mb-2">
+        <h2 class="text-lg font-semibold">Productos destacados</h2>
+        <a href="#" class="text-sm text-blue-600 hover:underline">Ver más</a>
+      </div>
+      <div class="relative">
+        <div
+          id="carousel1"
+          class="flex transition-transform duration-500 space-x-4"
+        >
+          <div
+            class="bg-gray-300 dark:bg-gray-600 w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Producto 1
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Producto 2
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Producto 3
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Producto 4
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Producto 5
+          </div>
+        </div>
+        <button
+          onclick="slideCarousel('carousel1', -1, 300)"
+          class="absolute left-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow hover:scale-110 transition"
+        >
+          ◀
+        </button>
+        <button
+          onclick="slideCarousel('carousel1', 1, 300)"
+          class="absolute right-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow hover:scale-110 transition"
+        >
+          ▶
+        </button>
+      </div>
+    </section>
+
+    <!-- CATEGORÍAS -->
+    <section class="mx-4 my-8 flex justify-between flex-wrap gap-6">
+      <div
+        class="flex flex-col items-center transform hover:scale-105 transition"
+      >
+        <div
+          class="w-[240px] h-[240px] rounded-full bg-gray-400 dark:bg-gray-600 mb-2"
+        ></div>
+        <span class="text-base font-medium">Zapatillas</span>
+      </div>
+      <div
+        class="flex flex-col items-center transform hover:scale-105 transition"
+      >
+        <div
+          class="w-[240px] h-[240px] rounded-full bg-gray-400 dark:bg-gray-600 mb-2"
+        ></div>
+        <span class="text-base font-medium">Top</span>
+      </div>
+      <div
+        class="flex flex-col items-center transform hover:scale-105 transition"
+      >
+        <div
+          class="w-[240px] h-[240px] rounded-full bg-gray-400 dark:bg-gray-600 mb-2"
+        ></div>
+        <span class="text-base font-medium">Bottom</span>
+      </div>
+      <div
+        class="flex flex-col items-center transform hover:scale-105 transition"
+      >
+        <div
+          class="w-[240px] h-[240px] rounded-full bg-gray-400 dark:bg-gray-600 mb-2"
+        ></div>
+        <span class="text-base font-medium">Accesorios</span>
+      </div>
+      <div
+        class="flex flex-col items-center transform hover:scale-105 transition"
+      >
+        <div
+          class="w-[240px] h-[240px] rounded-full bg-gray-400 dark:bg-gray-600 mb-2"
+        ></div>
+        <span class="text-base font-medium">Destacados</span>
+      </div>
+    </section>
+
+    <!-- CARRUSEL ADICIONAL -->
+    <section class="mx-4 my-4 relative">
+      <div class="overflow-hidden relative">
+        <div
+          id="carousel2"
+          class="flex space-x-4 transition-transform duration-500"
+        >
+          <div
+            class="bg-gray-300 dark:bg-gray-600 min-w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Carrusel 1
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 min-w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Carrusel 2
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 min-w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Carrusel 3
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 min-w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Carrusel 4
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 min-w-[300px] h-[300px] rounded flex items-center justify-center text-lg"
+          >
+            Carrusel 5
+          </div>
+        </div>
+        <button
+          onclick="slideCarousel('carousel2', -1, 3)"
+          class="absolute left-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow hover:scale-110 transition"
+        >
+          ◀
+        </button>
+        <button
+          onclick="slideCarousel('carousel2', 1, 3)"
+          class="absolute right-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow hover:scale-110 transition"
+        >
+          ▶
+        </button>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-white mt-auto py-6 px-4">
+      <div class="flex flex-wrap justify-between items-center">
+        <div class="flex items-center space-x-2 mb-4 md:mb-0">
+          <div class="w-6 h-6 bg-white rounded-full"></div>
+          <span>Contacto</span>
+        </div>
+        <div class="text-sm">
+          <p>tiendaonline@gmail.com</p>
+          <p>+3001234567</p>
+          <p>otrocontacto@gmail.com</p>
+        </div>
+        <div class="text-sm mt-4 md:mt-0">
+          <p>Síguenos</p>
+          <div class="flex space-x-2">
+            <a href="#" class="hover:underline">Facebook</a>
+            <a href="#" class="hover:underline">Instagram</a>
+            <a href="#" class="hover:underline">Twitter</a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mt-4 border-t border-gray-700 pt-2 flex justify-center space-x-4 text-xs"
+      >
+        <a href="#" class="hover:underline">Enlace 1</a>
+        <a href="#" class="hover:underline">Enlace 2</a>
+        <a href="#" class="hover:underline">Enlace 3</a>
+      </div>
+    </footer>
+
+    <!-- SCRIPT DE REDIRECCIÓN -->
+    <script>
+      document.getElementById("loginbtn").addEventListener("click", () => {
+        window.location.href = "/register/register.html";
+      });
+    </script>
+
+    <script>
+      const positions = { carousel1: 0, carousel2: 0 };
+
+      function slideCarousel(id, direction, cardWidth) {
+        const carousel = document.getElementById(id);
+        const totalCards = carousel.children.length;
+        const visibleCards = 3;
+        const maxScroll = (totalCards - visibleCards) * (cardWidth + 16);
+
+        positions[id] += direction * (cardWidth + 16);
+
+        if (positions[id] < 0) positions[id] = 0;
+        if (positions[id] > maxScroll) positions[id] = maxScroll;
+
+        carousel.style.transform = `translateX(-${positions[id]}px)`;
+      }
+
+      document
+        .getElementById("toggleDarkMode")
+        .addEventListener("click", () => {
+          document.documentElement.classList.toggle("dark");
+        });
+
+      async function loadProducts() {
+        try {
+          const res = await fetch("http://localhost:8000/products");
+          const products = await res.json();
+
+          const carousel = document.getElementById("carousel1");
+          carousel.innerHTML = "";
+
+          products.forEach((product) => {
+            const card = document.createElement("div");
+            card.className =
+              "bg-white dark:bg-gray-700 w-[300px] h-[300px] rounded shadow flex flex-col justify-between p-4";
+            card.innerHTML = `
+        <img src="${product.image_url}" alt="${product.name}" class="h-40 object-cover rounded mb-2">
+        <h3 class="text-lg font-semibold">${product.name}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">$${product.price}</p>
+        <button class="mt-auto bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">Agregar al carrito</button>
+      `;
+            carousel.appendChild(card);
+          });
+        } catch (err) {
+          console.error("Error al cargar productos:", err);
+        }
+      }
+
+      loadProducts();
+    </script>
+
+    <style>
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.7s ease-in-out;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+# Usa una imagen ligera de Node
+FROM node:20-alpine
+
+# Crea el directorio de trabajo
+WORKDIR /app
+
+# Copia todos los archivos del frontend al contenedor
+COPY . .
+
+# Si usas Tailwind con un script local (por ejemplo npm run build:css)
+# puedes compilarlo aquí, si no, esta línea se puede omitir
+RUN npm install
+RUN npm run tailwind:build || echo "Sin script de build, continuando..."
+
+# Instala http-server globalmente
+RUN npm install -g http-server
+
+# Expone el puerto 3000
+EXPOSE 3000
+
+# Inicia el servidor HTTP
+CMD ["http-server", ".", "-p", "3000", "-c-1"]
