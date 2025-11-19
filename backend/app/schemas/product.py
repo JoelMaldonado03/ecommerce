@@ -7,7 +7,7 @@ class ProductCreate(BaseModel):
     description: Optional[str] = None
     price: float
     category: Optional[str] = None
-    image_url: Optional[str] = None
+    image_filename: Optional[str] = None
 
 class ProductUpdate(BaseModel):
     id: int
@@ -15,7 +15,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     price: float
     category: Optional[str] = None
-    image_url: Optional[str] = None
+    image_filename: Optional[str] = None
 
 class ProductSchema(BaseModel):
     id: int
@@ -23,7 +23,7 @@ class ProductSchema(BaseModel):
     description: Optional[str] = None
     price: float
     category: Optional[str] = None
-    image_url: Optional[str] = None
+    image_filename: Optional[str] = None
     created_at: Optional[datetime]
 
     class Config:
