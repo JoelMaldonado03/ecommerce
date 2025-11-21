@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # DB
 Base.metadata.create_all(bind=engine)
 
